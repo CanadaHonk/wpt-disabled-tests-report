@@ -22,6 +22,14 @@ function positionLegend() {
   return pos;
 }
 
+const landmarks = {
+  'May 2018': 'NeverFixTests file for Chromium was added',
+  'April 2020': 'Missing Chromium data',
+  'August 2020': 'Fixed Chromium data',
+  'December 2020': 'Stopped running',
+  'September 2023': 'Fork revived'
+};
+
 d3.csv("data.csv", type, function(error, data) {
   if (error) throw error;
 
@@ -57,6 +65,32 @@ d3.csv("data.csv", type, function(error, data) {
       .attr("dy", "0.71em")
       .attr("fill", "#000")
       .text("Tests");
+
+  for (const l in landmarks) {
+    const p = x(new Date(l));
+    console.log(l, p);
+    if (p < 0) continue;
+
+    const gr = g.append("g")
+      .attr("transform", `translate(${p}, 0)`);
+
+    gr.append("line")
+        .attr("x1", 0)
+        .attr("y1", 0)
+        .attr("x2", 0)
+        .attr("y2", height)
+        .style("stroke", "rgba(0, 0, 0, 0.4)")
+        .style("stroke-dasharray", 4);
+    gr.append("text")
+        .attr("transform", "rotate(-90)")
+        .attr("x", landmarks[l].length * -6)
+        .attr("y", 4)
+        .attr("dy", "0.71em")
+        .style("font", "10px sans-serif")
+        .attr("fill", "#000")
+        .text(landmarks[l]);
+  }
+
 
   var group = g.selectAll(".group")
     .data(groups)
