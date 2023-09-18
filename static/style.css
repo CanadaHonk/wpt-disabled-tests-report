@@ -1,7 +1,7 @@
 html { font-family: sans-serif; line-height: 1.5; background: white; color: black }
-body { margin-bottom: 50vh }
-p { margin: 0 40px; padding: 0.5em; background-color: #fdd73d; max-width: 55em }
-h1 { background-color: #eaeaea; font-size: 1.5em; font-weight: normal; padding-left: 50px; text-indent: -50px }
+body { margin: 0; margin-bottom: 50vh }
+p { margin: 0 60px; padding: 0.5em; background-color: #fdd73d; }
+h1 { background-color: #eaeaea; font-size: 1.5em; font-weight: normal; padding: 2px 10px; font-weight: 600; margin: 0; margin-bottom: 20px }
 img { padding: 10px 50px; vertical-align: -16px }
 table { border-collapse: collapse; width: 100% }
 td:nth-child(4) { white-space: nowrap }
@@ -14,7 +14,7 @@ table:not([class]) tr:nth-child(even), .filtered .even { background-color: #eaea
 .flaky.gh-label { background-color: #d93f0b; color: white }
 .gh-button { background-image: linear-gradient(-180deg, #fafbfc 0%, #eff3f6 90%); color: black; white-space: nowrap; border: 1px solid silver; padding: 6px 12px; border-radius:0.25em }
 .gh-button:hover { text-decoration: none }
-figure { margin: 1em 40px; max-width: 55em }
+figure { margin: 1em 60px }
 figcaption { font-size: smaller; font-style: italic; text-align: center }
 svg { display: block }
 path { fill: none }

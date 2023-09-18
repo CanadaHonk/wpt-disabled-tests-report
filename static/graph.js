@@ -1,13 +1,13 @@
 var svg = d3.select("svg"),
     margin = {top: 20, right: 80, bottom: 30, left: 50},
-    width = svg.attr("width") - margin.left - margin.right,
+    width = window.innerWidth - 8 - 60 - margin.left - margin.right, // svg.attr("width") - margin.left - margin.right,
     height = svg.attr("height") - margin.top - margin.bottom,
     g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 var parseTime = d3.timeParse("%Y-%m-%d");
 
 var x = d3.scaleTime().range([0, width]),
-    y = d3.scalePow().exponent(0.5).range([height, 0]),
+    y = d3.scaleLinear().range([height, 0]),// d3.scalePow().exponent(0.5).range([height, 0]),
     z = d3.scaleOrdinal(d3.schemeCategory10);
 
 var line = d3.line()
@@ -50,7 +50,7 @@ d3.csv("data.csv", type, function(error, data) {
 
   g.append("g")
       .attr("class", "axis axis--y")
-      .call(d3.axisLeft(y))
+      .call(d3.axisLeft(y).tickArguments([6]))
     .append("text")
       .attr("transform", "rotate(-90)")
       .attr("y", 6)
