@@ -1,4 +1,4 @@
-http://bocoup.github.io/wpt-disabled-tests-report/
+https://canadahonk.github.io/wpt-disabled-tests-report/
 
 Investigate what's up with this test:
 
