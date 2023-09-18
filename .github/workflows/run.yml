@@ -32,7 +32,7 @@ jobs:
     - name: Get previous
       run: |
         git fetch origin gh-pages
-        git checkout FETCH_HEAD -- data.csv
+        git checkout FETCH_HEAD -- data.csv CNAME
 
     - name: Build
       run: python3 build.py
