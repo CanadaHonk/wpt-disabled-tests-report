@@ -26,9 +26,6 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Install deps
-      run: pip3 install xlrd
-
     - name: Get previous
       run: |
         git fetch origin gh-pages

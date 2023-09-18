@@ -5,7 +5,6 @@ import json
 import re
 from string import Template
 from datetime import date
-import xlrd
 import html
 import urllib
 import time
