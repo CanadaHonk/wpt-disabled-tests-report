@@ -1,0 +1,42 @@
+name: Run
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main" ]
+  schedule:
+    - cron: "0 0 * * *" # autorun daily at midnight utc
+
+jobs:
+  run:
+    runs-on: ubuntu-22.04
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install deps
+      run: pip3 install xlrd
+
+    - name: Get previous
+      run: |
+        git fetch origin gh-pages
+        git checkout FETCH_HEAD -- data.csv
+
+    - name: Build
+      run: python3 build.py
+
+    - name: Deploy to GitHub Pages
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        folder: .
