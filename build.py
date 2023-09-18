@@ -16,8 +16,6 @@ chromiumURL = "https://raw.githubusercontent.com/chromium/chromium/master/third_
 chromiumNeverFixTestsURL = "https://raw.githubusercontent.com/chromium/chromium/master/third_party/blink/web_tests/NeverFixTests"
 chromiumSlowTestsURL = "https://raw.githubusercontent.com/chromium/chromium/master/third_party/blink/web_tests/SlowTests"
 webkitURL = "https://raw.githubusercontent.com/WebKit/webkit/master/LayoutTests/TestExpectations"
-edgeXLSXURL = "https://github.com/web-platform-tests/wpt/files/1984479/NotRunFiles.xlsx"
-edgeHTMLURL = "https://github.com/web-platform-tests/wpt/issues/10655#issuecomment-387434035"
 flakyQuery = "q=is%3Aissue+label%3Aflaky"
 wptAPIURL = "https://api.github.com/search/issues?" + flakyQuery + "+repo%3Aweb-platform-tests/wpt"
 wptHTMLURL = "https://github.com/web-platform-tests/wpt/issues?utf8=%E2%9C%93&" + flakyQuery
@@ -129,16 +127,6 @@ extractFromTestExpectations(webkitURL,
                             b"imported/w3c/web-platform-tests",
                             "webkit")
 
-# EdgeHTML
-xlsx = fetchWithRetry(edgeXLSXURL).read()
-workbook = xlrd.open_workbook(filename="NotRunFiles.xlsx", file_contents=xlsx)
-sheet = workbook.sheet_by_name('NotRunFiles')
-for rownum in range(sheet.nrows):
-    # Skip the header row
-    if rownum == 0:
-        continue
-    addPath(None, "/" + "/".join(sheet.row_values(rownum)), "disabled", "edge")
-
 # web-platform-tests issues
 wptIssues = json.loads(fetchWithRetry(wptAPIURL).read())["items"]
 for item in wptIssues:
@@ -176,7 +164,7 @@ dashboardsTemplate = Template("Test result history for: " + \
 
 def getProducts(item):
     products = []
-    for product in ("mozilla", "chromium", "webkit", "edge"):
+    for product in ("mozilla", "chromium", "webkit"):
         if product in item:
             products.append(product)
     return products
@@ -289,7 +277,6 @@ outHTML = htmlTemplate.substitute(title="Disabled/flaky/slow web-platform-tests 
                                   chromiumNeverFixTestsURL=html.escape(chromiumNeverFixTestsURL),
                                   chromiumSlowTestsURL=html.escape(chromiumSlowTestsURL),
                                   webkitURL=html.escape(webkitURL),
-                                  edgeHTMLURL=html.escape(edgeHTMLURL),
                                   wptHTMLURL=html.escape(wptHTMLURL),
                                   date=todayStr,
                                   thead=theadStr,
