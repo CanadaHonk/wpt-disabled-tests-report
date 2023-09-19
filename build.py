@@ -24,6 +24,9 @@ wptHTMLURL = "https://github.com/web-platform-tests/wpt/issues?utf8=%E2%9C%93&" 
 common = []
 
 def getStatus(result):
+    if result is None:
+        return None
+
     if result.find("disabled") != -1 or result == "[ Skip ]" or result == "[ WontFix ]":
         return "disabled"
     elif result == "[ Slow ]" or result == "[ Timeout ]":
