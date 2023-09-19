@@ -10,6 +10,8 @@ import urllib
 import time
 
 mozillaURL = "https://searchfox.org/mozilla-central/search?q=disabled%3A&case=true&regexp=false&path=testing%2Fweb-platform%2Fmeta"
+mozillaTimeoutURL = "https://searchfox.org/mozilla-central/search?q=%5C%5BTIMEOUT%2C+OK%5C%5D%7C%5C%5BOK%2C+TIMEOUT%5C%5D%7C%3A+TIMEOUT&path=testing%2Fweb-platform%2Fmeta&case=true&regexp=true"
+mozillaFlakyURL = "https://searchfox.org/mozilla-central/search?q=%5C%5B%28PASS%7CFAIL%2C+PASS%29&path=testing%2Fweb-platform%2Fmeta&case=true&regexp=true"
 mozillaBugzillaURL = "https://searchfox.org/mozilla-central/search?q=bugzilla&case=true&path=testing%2Fweb-platform%2Fmeta"
 chromiumURL = "https://raw.githubusercontent.com/chromium/chromium/master/third_party/blink/web_tests/TestExpectations"
 chromiumNeverFixTestsURL = "https://raw.githubusercontent.com/chromium/chromium/master/third_party/blink/web_tests/NeverFixTests"
@@ -59,7 +61,7 @@ def addPath(bug, path, results, product, onlyBug = False):
         common.append({"path": path, product: {"bug": bug, "results": results}})
 
 # Mozilla
-def scrapeSearchFox(url, isBugzillaSearch = False):
+def scrapeSearchFox(url, isBugzillaSearch = False, forceResult = False):
     contents = fetchWithRetry(url).readlines()
     # Extract the data, it's on a single line after a "<script>" line
     foundScript = False
@@ -81,10 +83,20 @@ def scrapeSearchFox(url, isBugzillaSearch = False):
             bug = values[0].split(' ')[0]
         else:
             bug = None
+
+        # skip fission
+        if results.find("fission") != -1:
+            continue
+
+        if forceResult:
+            results = forceResult
+
         addPath(bug, item["path"].replace("testing/web-platform/meta", "").replace(".ini", ""), results, "mozilla", isBugzillaSearch)
 
 scrapeSearchFox(mozillaURL)
 scrapeSearchFox(mozillaBugzillaURL, True)
+scrapeSearchFox(mozillaTimeoutURL, False, "[ Timeout ]")
+scrapeSearchFox(mozillaFlakyURL)
 
 # Fetch and parse TestExpectations file
 def extractFromTestExpectations(url, wptPrefix, product):
@@ -151,7 +163,7 @@ disabledRows = []
 
 htmlTemplate = Template(open('templates/index.html', 'r').read())
 todayStr = date.today().isoformat()
-theadStr = "<tr><th>Path<th>Products<th>Results<th>Bugs<th>New issue</tr>"
+theadStr = "<tr><th>Path<th>Engines<th>Results<th>Bugs<th>New issue</tr>"
 rowTemplate = Template("<tr><td>$path<td> $products<td> $results<td> $bugs<td> $newIssue</tr>")
 issueTitleTemplate = Template("$path is $results in $products")
 issueBodyTemplate = Template(open('templates/issue-body.md', 'r').read())
@@ -199,7 +211,7 @@ def stringify(item, products, property, joiner):
     if property == "bug":
         if "web-platform-tests" in item:
             arr.append(link(item["web-platform-tests"][property]))
-    return joiner.join(arr)
+    return joiner.join(filter(lambda x: x is not None and x != "None", arr))
 
 def shortResult(item, products):
     arr = []

@@ -18,6 +18,8 @@ figure { margin: 1em 60px }
 figcaption { font-size: smaller; font-style: italic; text-align: center }
 svg { display: block }
 path { fill: none }
-#filter-input { width: 80%; margin-left: 1.5em }
+#filter-input { width: 70%; margin-left: 1em }
 #filter-input:invalid { background-color: pink }
+#start-input { margin-left: 1em }
 label { padding-left: 1em }
+label:not(:first-child) { margin-left: 2em }
