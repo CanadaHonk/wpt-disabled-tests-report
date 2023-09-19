@@ -163,7 +163,7 @@ disabledRows = []
 
 htmlTemplate = Template(open('templates/index.html', 'r').read())
 todayStr = date.today().isoformat()
-theadStr = "<tr><th>Path<th>Products<th>Results<th>Bugs<th>New issue</tr>"
+theadStr = "<tr><th>Path<th>Engines<th>Results<th>Bugs<th>New issue</tr>"
 rowTemplate = Template("<tr><td>$path<td> $products<td> $results<td> $bugs<td> $newIssue</tr>")
 issueTitleTemplate = Template("$path is $results in $products")
 issueBodyTemplate = Template(open('templates/issue-body.md', 'r').read())
