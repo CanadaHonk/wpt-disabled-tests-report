@@ -10,6 +10,8 @@ import urllib
 import time
 
 mozillaURL = "https://searchfox.org/mozilla-central/search?q=disabled%3A&case=true&regexp=false&path=testing%2Fweb-platform%2Fmeta"
+mozillaTimeoutURL = "https://searchfox.org/mozilla-central/search?q=%5C%5BTIMEOUT%2C+OK%5C%5D%7C%5C%5BOK%2C+TIMEOUT%5C%5D%7C%3A+TIMEOUT&path=testing%2Fweb-platform%2Fmeta&case=true&regexp=true"
+mozillaFlakyURL = "https://searchfox.org/mozilla-central/search?q=%5C%5B%28PASS%7CFAIL%2C+PASS%29&path=testing%2Fweb-platform%2Fmeta&case=true&regexp=true"
 mozillaBugzillaURL = "https://searchfox.org/mozilla-central/search?q=bugzilla&case=true&path=testing%2Fweb-platform%2Fmeta"
 chromiumURL = "https://raw.githubusercontent.com/chromium/chromium/master/third_party/blink/web_tests/TestExpectations"
 chromiumNeverFixTestsURL = "https://raw.githubusercontent.com/chromium/chromium/master/third_party/blink/web_tests/NeverFixTests"
@@ -59,7 +61,7 @@ def addPath(bug, path, results, product, onlyBug = False):
         common.append({"path": path, product: {"bug": bug, "results": results}})
 
 # Mozilla
-def scrapeSearchFox(url, isBugzillaSearch = False):
+def scrapeSearchFox(url, isBugzillaSearch = False, forceResult = False):
     contents = fetchWithRetry(url).readlines()
     # Extract the data, it's on a single line after a "<script>" line
     foundScript = False
@@ -81,10 +83,20 @@ def scrapeSearchFox(url, isBugzillaSearch = False):
             bug = values[0].split(' ')[0]
         else:
             bug = None
+
+        # skip fission
+        if results.find("fission") != -1:
+            continue
+
+        if forceResult:
+            results = forceResult
+
         addPath(bug, item["path"].replace("testing/web-platform/meta", "").replace(".ini", ""), results, "mozilla", isBugzillaSearch)
 
 scrapeSearchFox(mozillaURL)
 scrapeSearchFox(mozillaBugzillaURL, True)
+scrapeSearchFox(mozillaTimeoutURL, False, "[ Timeout ]")
+scrapeSearchFox(mozillaFlakyURL)
 
 # Fetch and parse TestExpectations file
 def extractFromTestExpectations(url, wptPrefix, product):
