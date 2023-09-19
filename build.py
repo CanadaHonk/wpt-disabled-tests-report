@@ -23,6 +23,14 @@ wptHTMLURL = "https://github.com/web-platform-tests/wpt/issues?utf8=%E2%9C%93&" 
 
 common = []
 
+def getStatus(result):
+    if result.find("disabled") != -1 or result == "[ Skip ]" or result == "[ WontFix ]":
+        return "disabled"
+    elif result == "[ Slow ]" or result == "[ Timeout ]":
+        return "slow"
+    else:
+        return "flaky"
+
 # Retry fetching if it fails
 def fetchWithRetry(url):
     remaining = 4
@@ -58,7 +66,7 @@ def addPath(bug, path, results, product, onlyBug = False):
                 item[product] = {"bug": bug, "results": results}
             pathFound = True
     if pathFound == False and onlyBug == False:
-        common.append({"path": path, product: {"bug": bug, "results": results}})
+        common.append({"path": path, product: {"bug": bug, "results": results, "status": getStatus(results) }})
 
 # Mozilla
 def scrapeSearchFox(url, isBugzillaSearch = False, forceResult = False):
@@ -217,12 +225,7 @@ def shortResult(item, products):
     arr = []
     for product in products:
         result = item[product]["results"]
-        if result.find("disabled") != -1 or result == "[ Skip ]" or result == "[ WontFix ]":
-            arr.append("disabled")
-        elif result == "[ Slow ]" or result == "[ Timeout ]":
-            arr.append("slow")
-        else:
-            arr.append("flaky")
+        arr.append(getStatus())
     # Remove duplicates
     arr = list(set(arr))
     return "/".join(arr)
