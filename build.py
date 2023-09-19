@@ -225,7 +225,7 @@ def shortResult(item, products):
     arr = []
     for product in products:
         result = item[product]["results"]
-        arr.append(getStatus())
+        arr.append(getStatus(result))
     # Remove duplicates
     arr = list(set(arr))
     return "/".join(arr)
