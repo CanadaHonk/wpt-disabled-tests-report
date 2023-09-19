@@ -24,13 +24,13 @@ const produceGraph = () => {
   }
 
   const landmarks = {
-    'May 31 2018': 'Added Chromium NeverFixTests',
+    'May 31 2018': [ 'Added Chromium NeverFixTests' ],
     // 'July 29 2018': 'Added Chromium SlowTests',
-    'April 2020': 'Missing Chromium data',
-    'July 31 2020': 'Fixed Chromium data',
-    'December 11 2020': 'Stopped running',
-    'September 1 2023': 'Started running',
-    'September 19 2023': 'Added Gecko flaky+timeout'
+    'April 2020': [ 'Missing Chromium data' ],
+    'July 31 2020': [ 'Fixed Chromium data' ],
+    'December 11 2020': [ 'Stopped running' ],
+    // 'September 18 2023': 'Fork revival',
+    /* 19 */ 'September 18 2023': [ 'Added Gecko flaky+timeout', 'Fork revival' ]
   };
 
   d3.csv("data.csv", type, function(error, data) {
@@ -89,14 +89,20 @@ const produceGraph = () => {
           .attr("y2", height)
           .style("stroke", "rgba(0, 0, 0, 0.4)")
           .style("stroke-dasharray", 4);
-      gr.append("text")
-          .attr("transform", "rotate(-90)")
-          .attr("x", landmarks[l].length * -6)
-          .attr("y", 4)
-          .attr("dy", "0.71em")
-          .style("font", "10px sans-serif")
-          .attr("fill", "#000")
-          .text(landmarks[l]);
+
+      let p2 = 0
+      for (const t of landmarks[l]) {
+        p2 += t.length * -6;
+        gr.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("x", p2)
+            .attr("y", 5)
+            .attr("dy", "0.71em")
+            .style("font", "10px sans-serif")
+            .attr("fill", "#000")
+            .text(t);
+        p2 -= 40;
+      }
     }
 
 
