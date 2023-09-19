@@ -23,11 +23,12 @@ function positionLegend() {
 }
 
 const landmarks = {
-  'May 2018': 'NeverFixTests file for Chromium was added',
+  'May 31 2018': 'Added Chromium NeverFixTests',
+  // 'July 29 2018': 'Added Chromium SlowTests',
   'April 2020': 'Missing Chromium data',
-  'August 2020': 'Fixed Chromium data',
-  'December 2020': 'Stopped running',
-  'September 2023': 'Fork revived'
+  'July 31 2020': 'Fixed Chromium data',
+  'December 11 2020': 'Stopped running',
+  'September 18 2023': 'Started running'
 };
 
 d3.csv("data.csv", type, function(error, data) {
@@ -68,7 +69,6 @@ d3.csv("data.csv", type, function(error, data) {
 
   for (const l in landmarks) {
     const p = x(new Date(l));
-    console.log(l, p);
     if (p < 0) continue;
 
     const gr = g.append("g")
