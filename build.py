@@ -211,7 +211,7 @@ def stringify(item, products, property, joiner):
     if property == "bug":
         if "web-platform-tests" in item:
             arr.append(link(item["web-platform-tests"][property]))
-    return joiner.join(arr)
+    return joiner.join(filter(lambda x: x is not None and x != "None", arr))
 
 def shortResult(item, products):
     arr = []
