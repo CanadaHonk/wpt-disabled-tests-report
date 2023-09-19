@@ -18,7 +18,7 @@ const produceGraph = () => {
 
   var pos = 0;
   function positionLegend() {
-    var labelWidth = 100;
+    var labelWidth = width / 12;
     pos += labelWidth;
     return pos;
   }
@@ -105,7 +105,6 @@ const produceGraph = () => {
       }
     }
 
-
     var group = g.selectAll(".group")
       .data(groups)
       .enter().append("g")
@@ -116,9 +115,17 @@ const produceGraph = () => {
         .attr("d", function(d) { return line(d.values); })
         .style("stroke", function(d) { return z(d.id); });
 
+    console.log([ x.invert(100) ]);
+
     group.append("text")
         .datum(function(d) { return {id: d.id, value: d.values[d.values.length - 1]}; })
-        .attr("transform", function(d) { return "translate(" + positionLegend() + ", " + (y(d.value.tests) - 6) + ")"; })
+        .attr("transform", function(d) {
+          // find y of location for this id at position legend
+          const p = positionLegend(), date = x.invert(p);
+          const p2 = data.find(x => x.date > date)[d.id];
+
+          return "translate(" + p + ", " + (y(p2) - 8) + ")";
+        })
         .style("font", "10px sans-serif")
         .style("fill", function(d) { return z(d.id); })
         .text(function(d) { return d.id; });
