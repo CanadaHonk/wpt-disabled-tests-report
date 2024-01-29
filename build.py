@@ -179,10 +179,10 @@ rowTemplate = Template("<tr><td>$path<td> $products<td> $results<td> $bugs<td> $
 issueTitleTemplate = Template("$path is $results in $products")
 issueBodyTemplate = Template(open('templates/issue-body.md', 'r').read())
 newIssueTemplate = Template("""<a href="https://github.com/web-platform-tests/wpt/issues/new?title=$title&amp;body=$body&amp;labels=flaky" class="gh-button">New issue</a>""")
-linkPathTemplate = Template("<a href='https://wpt.fyi$path'>$path</a><br><small>$dashboards</small>")
+linkPathTemplate = Template("<a href='https://wpt.fyi/results$path'>$path</a><br><small>$dashboards</small>")
 dashboardsTemplate = Template("Test result history for: " + \
-                            "<a href='https://test-results.appspot.com/dashboards/flakiness_dashboard.html#testType=webkit_layout_tests&amp;tests=external/wpt$path'>chromium</a>, " + \
-                            "<a href='https://webkit-test-results.webkit.org/dashboards/flakiness_dashboard.html#tests=imported/w3c/web-platform-tests$path'>webkit</a>")
+                            "<a href='https://ci.chromium.org/ui/p/chromium/test-search?q=wpt/$path'>chromium</a>, " + \
+                            "<a href='https://results.webkit.org/?suite=layout-tests&test=imported/w3c/web-platform-tests$path'>webkit</a>")
 
 def getProducts(item):
     products = []
