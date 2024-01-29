@@ -181,7 +181,7 @@ issueBodyTemplate = Template(open('templates/issue-body.md', 'r').read())
 newIssueTemplate = Template("""<a href="https://github.com/web-platform-tests/wpt/issues/new?title=$title&amp;body=$body&amp;labels=flaky" class="gh-button">New issue</a>""")
 linkPathTemplate = Template("<a href='https://wpt.fyi/results$path'>$path</a><br><small>$dashboards</small>")
 dashboardsTemplate = Template("Test result history for: " + \
-                            "<a href='https://ci.chromium.org/ui/p/chromium/test-search?q=wpt/$path'>chromium</a>, " + \
+                            "<a href='https://ci.chromium.org/ui/p/chromium/test-search?q=wpt$path'>chromium</a>, " + \
                             "<a href='https://results.webkit.org/?suite=layout-tests&test=imported/w3c/web-platform-tests$path'>webkit</a>")
 
 def getProducts(item):
